@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Toaster } from "@/components/ui/sonner"
 import { Filter } from "./components/Filters"
 import Search from "./components/Search"
-import db from "@/lib/database"
+import { fetchAllCategories } from "@/actions/server/categories"
 
 
 const geistSans = localFont({
@@ -30,7 +30,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const categories = await db.category.findMany()
+  const categories = await fetchAllCategories()
   return (
     <html lang="en">
       <body
