@@ -6,10 +6,21 @@ import { SearchParams, stringifySearchParams } from "@/lib/url-state"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ArrowLeftIcon } from "lucide-react"
+import db from "@/lib/database"
 
 interface ArticlePageProps {
   params: { id: string }
   searchParams: SearchParams
+}
+
+
+// Prerender the first page of books
+export async function generateStaticParams() {
+  const articles = await db.article.findMany({take: 40});
+
+  return articles.map((article) => ({
+    id: article.id,
+  }));
 }
 
 const ArticlePage = async ({ params, searchParams }: ArticlePageProps) => {
