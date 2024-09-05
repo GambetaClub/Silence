@@ -31,6 +31,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   const categories = await fetchAllCategories()
+  
   return (
     <html lang="en">
       <body
