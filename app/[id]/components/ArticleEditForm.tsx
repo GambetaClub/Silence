@@ -23,29 +23,14 @@ import { useState } from "react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { formatPrice } from "../../../lib/utils"
 import { Pencil, X } from "lucide-react"
-import MoneyInput from "./MoneyInput"
 import { useRouter } from "next/navigation"
+import { ArticleFormSchema } from "@/lib/constants"
+import MoneyInput from "@/components/shared/MoneyInput"
 
 interface ArticleEditFormProps {
   article: Article
 }
 
-const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  description: z.string().min(10, {
-    message: "Username must be at least 2 characters.",
-  }),
-  price: z.coerce
-    .number()
-    .max(1000, {
-      message: "Price must be less than 1000.",
-    })
-    .min(0, {
-      message: "Price must be more than 0.",
-    }),
-})
 
 const ArticleEditForm = ({ article }: ArticleEditFormProps) => {
   const [isEditing, setIsEditing] = useState(false)
@@ -53,8 +38,8 @@ const ArticleEditForm = ({ article }: ArticleEditFormProps) => {
 
   const toggleEdit = () => setIsEditing((current) => !current)
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof ArticleFormSchema>>({
+    resolver: zodResolver(ArticleFormSchema),
     defaultValues: {
       name: article.name,
       description: article.description || "",
@@ -62,7 +47,7 @@ const ArticleEditForm = ({ article }: ArticleEditFormProps) => {
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof ArticleFormSchema>) => {
     try {
       await axios.patch(`/api/articles/${article.id}`, values)
       toast.success("Article updated")

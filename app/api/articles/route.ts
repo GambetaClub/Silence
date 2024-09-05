@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server"
 import db from "@/lib/database"
+import { NextResponse } from "next/server"
 
-export async function PATCH(
+
+export async function PUT(
   req: Request,
-  { params }: { params: { articleId: string } }
 ) {
   try {
     // Probably here we would do an authorization validation
@@ -12,17 +12,15 @@ export async function PATCH(
 
     // We would make sure all values look correct on more time!
 
-    const article = await db.article.update({
-      where: {
-        id: params.articleId,
-      },
+    const article = await db.article.create({
       data: { ...values },
     })
 
     return NextResponse.json(article)
 
+    
   } catch (error) {
-    console.log("[UPDATING_ARTICLE]", error)
+    console.log("[CREATING_ARTICLE]", error)
     return new NextResponse("Internal Error", { status: 500 })
   }
 }

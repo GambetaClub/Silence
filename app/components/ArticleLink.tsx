@@ -15,9 +15,9 @@ const ArticleLink = ({ searchParams, article }: ArticleLinkProps) => {
       key={article.id}
       className="block transition ease-in-out md:hover:scale-105 border rounded-lg p-4"
     >
-      <div className="flex flex-col">
-        {article.name}
-        {formatPrice(article.price)}
+      <div className="flex flex-col gap-4">
+        <div className="line-clamp-1 font-semibold">{article.name}</div>
+        <div>{formatPrice(article.price)}</div>
       </div>
     </Link>
   )

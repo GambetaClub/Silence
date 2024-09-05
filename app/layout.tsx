@@ -3,10 +3,10 @@ import localFont from "next/font/local"
 import "./globals.css"
 import { Suspense } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
-import Search from "@/components/layout/search"
-import { Filter } from "@/components/layout/filters"
 import { fetchAllCategories } from "@/actions/server/categories"
 import { Toaster } from "@/components/ui/sonner"
+import { Filter } from "./components/Filters"
+import Search from "./components/Search"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

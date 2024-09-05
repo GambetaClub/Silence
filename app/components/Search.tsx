@@ -1,9 +1,9 @@
 "use client"
 import React, { useRef, useState } from "react"
-import { Input } from "../ui/input"
 import { SearchIcon } from "lucide-react"
 import { useBackpressure } from "@/lib/use-backpressure"
 import { useSearchParams } from "next/navigation"
+import { Input } from "@/components/ui/input"
 
 const Search = () => {
   const searchParams = useSearchParams()

@@ -12,7 +12,7 @@ import {
   stringifySearchParams,
 } from "@/lib/url-state"
 import { Category } from "@prisma/client"
-import { Slider } from "../ui/slider"
+import { Slider } from "@/components/ui/slider"
 
 interface FilterBaseProps {
   categories: Category[]
