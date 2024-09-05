@@ -16,6 +16,10 @@ interface ArticlePageProps {
 //   }))
 // }
 
+// export async function getStaticProps({ params }: ArticlePageProps) {
+//   return { props: { params } }
+// }
+
 const ArticlePage = async ({ params }: ArticlePageProps) => {
   const article = await fetchArticleById(params.id)
   return (
