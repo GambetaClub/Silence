@@ -13,6 +13,7 @@ import {
 } from "@/lib/url-state"
 import { Category } from "@prisma/client"
 import { Slider } from "@/components/ui/slider"
+import Link from "next/link"
 
 interface FilterBaseProps {
   categories: Category[]
@@ -75,8 +76,6 @@ function FilterBase({ categories, searchParams }: FilterBaseProps) {
     })
   }
 
-  console.log("Price order: ", optimisticFilters.priceOrd)
-
   const maxPrice = Number(optimisticFilters.price) || 1000
 
   return (
@@ -85,7 +84,14 @@ function FilterBase({ categories, searchParams }: FilterBaseProps) {
       className="flex-shrink-0 flex flex-col h-full rounded-lg"
     >
       <ScrollArea className="flex-grow">
-        <h2>Filter</h2>
+        <div className="pb-8">
+          <Link href="/add/" className="py-4">
+            <Button className="w-full" size="lg">
+              Add Article
+            </Button>
+          </Link>
+        </div>
+        <h2>Filters</h2>
         <div className="p-2 space-y-4">
           {/* Price Filter */}
           <div>

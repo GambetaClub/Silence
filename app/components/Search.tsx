@@ -7,20 +7,20 @@ import { Input } from "@/components/ui/input"
 
 const Search = () => {
   const searchParams = useSearchParams()
-  let [searchValue, setSearchValue] = useState<string>(
+  const [searchValue, setSearchValue] = useState<string>(
     searchParams.get("search") || ""
   )
-  let inputRef = useRef<HTMLInputElement>(null)
-  let { triggerUpdate, formRef } = useBackpressure()
+  const inputRef = useRef<HTMLInputElement>(null)
+  const { triggerUpdate, formRef } = useBackpressure()
 
   async function handleSubmit(formData: FormData) {
-    let query = formData.get("search") as string
-    let newUrl = `/?search=${encodeURIComponent(query)}`
+    const query = formData.get("search") as string
+    const newUrl = `/?search=${encodeURIComponent(query)}`
     await triggerUpdate(newUrl)
   }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    let newValue = e.target.value
+    const newValue = e.target.value
     setSearchValue(newValue)
     formRef.current?.requestSubmit()
   }

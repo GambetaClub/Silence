@@ -3,13 +3,11 @@ import {
   fetchArticlesWithPagination,
 } from "@/actions/server/articles"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { SearchParams } from "@/lib/url-state"
 import React from "react"
 import ArticleEditForm from "./components/ArticleEditForm"
 
 interface ArticlePageProps {
   params: { id: string }
-  searchParams: SearchParams
 }
 
 export async function generateStaticParams() {
@@ -20,17 +18,19 @@ export async function generateStaticParams() {
   }))
 }
 
-const ArticlePage = async ({ params, searchParams }: ArticlePageProps) => {
+const ArticlePage = async ({ params }: ArticlePageProps) => {
   const article = await fetchArticleById(params.id)
-  if (article) {
-    return (
-      <ScrollArea>
-        <ArticleEditForm article={article} />
-      </ScrollArea>
-    )
-  } else {
-    return <div>There is no such an article</div>
-  }
+  return (
+    <div className="p-6 bg-white rounded-lg">
+      {article ? (
+        <ScrollArea>
+          <ArticleEditForm article={article} />
+        </ScrollArea>
+      ) : (
+        <div>There is no such an article</div>
+      )}
+    </div>
+  )
 }
 
 export default ArticlePage
