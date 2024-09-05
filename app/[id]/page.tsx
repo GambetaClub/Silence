@@ -14,7 +14,7 @@ export async function generateStaticParams() {
   const articles = await fetchArticlesWithPagination({})
 
   return articles.map((article) => ({
-    id: article.id.toString(),
+    id: article.id,
   }))
 }
 
