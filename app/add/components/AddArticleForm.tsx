@@ -35,7 +35,7 @@ const AddArticleForm = () => {
 
   const onSubmit = async (values: z.infer<typeof ArticleFormSchema>) => {
     try {
-      const response = await axios.put(`/api/articles/`, values)
+      const response = await axios.post(`/api/articles/`, values)
       const article = response.data
 
       console.log(article)

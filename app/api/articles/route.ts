@@ -3,7 +3,7 @@ import db from "@/lib/database"
 import { NextResponse } from "next/server"
 
 
-export async function PUT(
+export async function POST(
   req: Request,
 ) {
   try {
