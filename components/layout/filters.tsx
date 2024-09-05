@@ -3,11 +3,8 @@
 import { useRouter, useSearchParams } from "next/navigation"
 import { useOptimistic, useTransition } from "react"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import qs from "query-string"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-// import { Input } from "@/components/ui/input" // For the name input
-// import { Slider } from "@/components/ui/slider"
 import { Label } from "@/components/ui/label"
 import {
   parseSearchParams,
@@ -15,6 +12,7 @@ import {
   stringifySearchParams,
 } from "@/lib/url-state"
 import { Category } from "@prisma/client"
+import { Slider } from "../ui/slider"
 
 interface FilterBaseProps {
   categories: Category[]
@@ -52,8 +50,6 @@ function FilterBase({ categories, searchParams }: FilterBaseProps) {
       ? currentCategories.filter((cat) => cat !== category)
       : [...currentCategories, category]
 
-    console.log(newCategories)
-
     handleFilterChange("categories", newCategories.join(","))
   }
 
@@ -64,34 +60,25 @@ function FilterBase({ categories, searchParams }: FilterBaseProps) {
     })
   }
 
+  const maxPrice = Number(optimisticFilters.price) || 1000
+
   return (
     <div
       data-pending={isPending ? "" : undefined}
       className="flex-shrink-0 flex flex-col h-full rounded-lg"
     >
       <ScrollArea className="flex-grow">
+        <h2>Filter</h2>
         <div className="p-2 space-y-4">
-          {/* Name Filter */}
-          {/* <div>
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              value={optimisticFilters.name || ""}
-              onChange={(e) => handleFilterChange("name", e.target.value)}
-              placeholder="Enter name"
-              className="mt-2"
-            />
-          </div> */}
-
           {/* Price Filter */}
-          {/* <div>
-            <Label htmlFor="price-range">Price Range</Label>
+          <div>
+            <Label htmlFor="price">Price Range</Label>
             <Slider
-              id="price-range"
+              id="price"
               min={0}
               max={1000}
               step={10}
-              value={[Number(optimisticFilters.price) || 1000]}
+              value={[maxPrice]}
               onValueChange={([value]) =>
                 handleFilterChange("price", value.toString())
               }
@@ -99,9 +86,9 @@ function FilterBase({ categories, searchParams }: FilterBaseProps) {
             />
             <div className="flex justify-between mt-1 text-sm ">
               <span>$0</span>
-              <span>{optimisticFilters.price || 1000}</span>
+              <span>${maxPrice}</span>
             </div>
-          </div> */}
+          </div>
 
           {/* Categories Filter */}
           <div>
@@ -126,6 +113,8 @@ function FilterBase({ categories, searchParams }: FilterBaseProps) {
               ))}
             </ScrollArea>
           </div>
+          <div>Sorting</div>
+          <div className="p-2 space-y-4"></div>
         </div>
       </ScrollArea>
 

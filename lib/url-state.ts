@@ -10,7 +10,7 @@ export function parseSearchParams(
 ): SearchParams {
   return {
     search: typeof params.search === 'string' ? params.search : undefined,
-    price: typeof params.search === 'string' ? params.search : undefined,
+    price: typeof params.price === 'string' ? params.price : undefined,
     categories: typeof params.categories === 'string' ? params.categories : undefined,
     page: typeof params.page === 'string' ? params.page : undefined,
   };
