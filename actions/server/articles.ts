@@ -11,10 +11,10 @@ export const fetchArticlesWithPagination = async (
   const skip = (requestedPage - 1) * ARTICLES_PER_PAGE
 
   let categories: string[] | undefined
-  let price =
+  const price =
     (searchParams.price && parseFloat(searchParams.price)) || undefined
 
-  let name = searchParams.search || undefined
+  const name = searchParams.search || undefined
 
   let priceOrd = searchParams.priceOrd
 

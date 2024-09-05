@@ -1,4 +1,4 @@
-import { fetchArticleById } from "@/actions/server/articles"
+import { fetchArticleById, fetchArticlesWithPagination } from "@/actions/server/articles"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import React from "react"
 import ArticleEditForm from "./components/ArticleEditForm"
@@ -12,8 +12,20 @@ interface ArticlePageProps {
   searchParams: SearchParams
 }
 
+
+
+export async function generateStaticParams() {
+  const articles = await fetchArticlesWithPagination({});
+
+  return articles.map((article) => ({
+    id: article.id,
+  }));
+}
+
 const ArticlePage = async ({ params, searchParams }: ArticlePageProps) => {
   const article = await fetchArticleById(params.id)
+
+
   return (
     <div className="p-6 bg-white rounded-lg">
       <Button variant="ghost" className="mb-4" asChild>
