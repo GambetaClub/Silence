@@ -4,7 +4,7 @@ import { SearchIcon } from "lucide-react"
 
 const Search = () => {
   return (
-    <div className="relative flex flex-1 flex-shrink-0 w-full rounded bg-white">
+    <div className="relative flex flex-1 flex-shrink-0 w-full rounded-lg bg-white">
       <label htmlFor="search" className="sr-only">
         Search
       </label>
