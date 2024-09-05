@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import Search from "@/components/layout/search"
 import { Filter } from "@/components/layout/filters"
 import { fetchAllCategories } from "@/actions/server/categories"
+import { Toaster } from "@/components/ui/sonner"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,7 +29,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-
   const categories = await fetchAllCategories()
   return (
     <html lang="en">
@@ -42,7 +42,7 @@ export default async function RootLayout({
                 <Suspense
                   fallback={<Skeleton className="h-4 w-20 rounded-lg" />}
                 >
-                  <Filter categories={categories}/>
+                  <Filter categories={categories} />
                 </Suspense>
               </div>
             </div>
@@ -60,6 +60,8 @@ export default async function RootLayout({
             <div className="flex-1 flex flex-col p-4">{children}</div>
           </div>
         </div>
+
+        <Toaster />
       </body>
     </html>
   )

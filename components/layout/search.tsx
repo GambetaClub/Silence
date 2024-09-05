@@ -1,16 +1,16 @@
 "use client"
-import React, { use, useEffect, useRef, useState } from "react"
+import React, { useRef, useState } from "react"
 import { Input } from "../ui/input"
 import { SearchIcon } from "lucide-react"
 import { useBackpressure } from "@/lib/use-backpressure"
+import { useSearchParams } from "next/navigation"
 
-interface SearchProps {
-  initialQuery: string
-}
-
-const Search = ({ initialQuery }: SearchProps) => {
-  let [searchValue, setSearchValue] = useState(initialQuery)
-  let inputRef = useRef<HTMLInputElement>(null);
+const Search = () => {
+  const searchParams = useSearchParams()
+  let [searchValue, setSearchValue] = useState<string>(
+    searchParams.get("search") || ""
+  )
+  let inputRef = useRef<HTMLInputElement>(null)
   let { triggerUpdate, formRef } = useBackpressure()
 
   async function handleSubmit(formData: FormData) {
@@ -25,7 +25,6 @@ const Search = ({ initialQuery }: SearchProps) => {
     formRef.current?.requestSubmit()
   }
 
-  
   return (
     <form
       ref={formRef}

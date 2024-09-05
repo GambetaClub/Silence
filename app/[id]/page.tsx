@@ -5,6 +5,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { SearchParams } from "@/lib/url-state"
 import React from "react"
+import ArticleEditForm from "./components/ArticleEditForm"
 
 interface ArticlePageProps {
   params: { id: string }
@@ -20,19 +21,15 @@ export async function generateStaticParams() {
 }
 
 const ArticlePage = async ({ params, searchParams }: ArticlePageProps) => {
-  if (params.id) {
-    const article = await fetchArticleById(params.id)
+  const article = await fetchArticleById(params.id)
+  if (article) {
     return (
       <ScrollArea>
-        <h2 className="text-lg">{article?.name}</h2>
-        <div className="flex flex-col">
-          <h4>Description</h4>
-          {article?.description}
-        </div>
+        <ArticleEditForm article={article} />
       </ScrollArea>
     )
   } else {
-    return <div>Hola</div>
+    return <div>There is no such an article</div>
   }
 }
 
