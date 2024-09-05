@@ -37,10 +37,25 @@ function FilterBase({ categories, searchParams }: FilterBaseProps) {
     value: string | undefined
   ) => {
     startTransition(() => {
-      const newFilters = { ...optimisticFilters, [filterType]: value }
+      const newFilters = { ...optimisticFilters }
+
+      if (value === "") {
+        delete newFilters[filterType]
+      } else {
+        newFilters[filterType] = value
+      }
+
       setOptimisticFilters(newFilters)
       updateURL(newFilters)
     })
+  }
+
+  const handlePriceOrdToggle = (order: string) => {
+    if (optimisticFilters.priceOrd === order) {
+      handleFilterChange("priceOrd", "")
+    } else {
+      handleFilterChange("priceOrd", order)
+    }
   }
 
   const handleCategoryToggle = (category: string) => {
@@ -59,6 +74,8 @@ function FilterBase({ categories, searchParams }: FilterBaseProps) {
       router.push("/")
     })
   }
+
+  console.log("Price order: ", optimisticFilters.priceOrd)
 
   const maxPrice = Number(optimisticFilters.price) || 1000
 
@@ -113,8 +130,30 @@ function FilterBase({ categories, searchParams }: FilterBaseProps) {
               ))}
             </ScrollArea>
           </div>
-          <div>Sorting</div>
-          <div className="p-2 space-y-4"></div>
+
+          {/* Sorting by Price */}
+        </div>
+        <div>Sorting</div>
+        <div>
+          <Label>Price</Label>
+          <div className="p-2 space-y-4">
+            <div className="flex items-center space-x-2 py-1">
+              <Checkbox
+                id="asc"
+                checked={optimisticFilters.priceOrd === "asc"}
+                onCheckedChange={() => handlePriceOrdToggle("asc")}
+              />
+              <Label htmlFor="asc">Ascending</Label>
+            </div>
+            <div className="flex items-center space-x-2 py-1">
+              <Checkbox
+                id="desc"
+                checked={optimisticFilters.priceOrd === "desc"}
+                onCheckedChange={() => handlePriceOrdToggle("desc")}
+              />
+              <Label htmlFor="desc">Descending</Label>
+            </div>
+          </div>
         </div>
       </ScrollArea>
 

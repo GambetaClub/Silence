@@ -16,6 +16,12 @@ export const fetchArticlesWithPagination = async (
 
   let name = searchParams.search || undefined
 
+  let priceOrd = searchParams.priceOrd
+
+  if (priceOrd !== "asc" && priceOrd !== "desc") {
+    priceOrd = undefined
+  }
+
   if (typeof searchParams.categories === "string") {
     categories = searchParams.categories
       .split(",")
@@ -37,6 +43,7 @@ export const fetchArticlesWithPagination = async (
           ? { contains: name, mode: "insensitive" }
           : undefined,
     },
+    orderBy: priceOrd !== undefined ? { price: priceOrd } : undefined,
     skip: skip,
     take: ARTICLES_PER_PAGE,
   })

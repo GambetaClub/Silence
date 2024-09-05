@@ -37,11 +37,14 @@ const formSchema = z.object({
   description: z.string().min(10, {
     message: "Username must be at least 2 characters.",
   }),
-  price: z.coerce.number().max(1000, {
-    message: "Price must be less than 1000.",
-  }).min(0, {
-    message: "Price must be more than 0.",
-  }),
+  price: z.coerce
+    .number()
+    .max(1000, {
+      message: "Price must be less than 1000.",
+    })
+    .min(0, {
+      message: "Price must be more than 0.",
+    }),
 })
 
 const ArticleEditForm = ({ article }: ArticleEditFormProps) => {
@@ -62,21 +65,17 @@ const ArticleEditForm = ({ article }: ArticleEditFormProps) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/articles/${article.id}`, values)
-      toast.success("Precio actualizado")
+      toast.success("Article updated")
       toggleEdit()
       router.refresh()
     } catch {
-      toast.error("Algo salió mal...")
+      toast.error("Something went wrong...")
     }
-    
   }
 
   return (
-    <ScrollArea className="p-4 border">
+    <ScrollArea className="p-4 rounded-lg bg-white">
       <div className="flex justify-between">
-        {!isEditing && (
-          <div className="text-4xl font-semibold">{article.name}</div>
-        )}
         <Button className="ml-auto" onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <div className="flex justify-center items-center">
@@ -92,10 +91,11 @@ const ArticleEditForm = ({ article }: ArticleEditFormProps) => {
         </Button>
       </div>
       {!isEditing && (
-        <>
+        <div className="flex flex-col gap-4">
+          <div className="text-3xl font-semibold">{article.name}</div>
           <div className="text-lg">{article.description}</div>
           <div>{formatPrice(article.price)}</div>
-        </>
+        </div>
       )}
       {isEditing && (
         <Form {...form}>
