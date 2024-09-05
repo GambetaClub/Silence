@@ -1,88 +1,90 @@
-'use client';
+"use client"
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useOptimistic, useTransition } from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input'; // For the name input
-import { Slider } from '@/components/ui/slider';
-import { Label } from '@/components/ui/label';
-import { parseSearchParams, SearchParams, stringifySearchParams } from '@/lib/url-state';
+import { useRouter, useSearchParams } from "next/navigation"
+import { useOptimistic, useTransition } from "react"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import qs from "query-string"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+// import { Input } from "@/components/ui/input" // For the name input
+// import { Slider } from "@/components/ui/slider"
+import { Label } from "@/components/ui/label"
+import {
+  parseSearchParams,
+  SearchParams,
+  stringifySearchParams,
+} from "@/lib/url-state"
+import { Category } from "@prisma/client"
 
-const CATEGORIES = [
-  { value: 'books', label: 'Books' },
-  { value: 'electronics', label: 'Electronics' },
-  { value: 'clothing', label: 'Clothing' },
-  // Add more categories as needed
-];
-
-interface FilterProps {
-  searchParams: URLSearchParams;
+interface FilterBaseProps {
+  categories: Category[]
+  searchParams: URLSearchParams
 }
 
-function FilterBase({ searchParams }: FilterProps) {
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+function FilterBase({ categories, searchParams }: FilterBaseProps) {
+  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
 
-  const initialFilters = parseSearchParams(Object.fromEntries(searchParams));
+  const initialFilters = parseSearchParams(Object.fromEntries(searchParams))
   const [optimisticFilters, setOptimisticFilters] =
-    useOptimistic<SearchParams>(initialFilters);
+    useOptimistic<SearchParams>(initialFilters)
 
   const updateURL = (newFilters: SearchParams) => {
-    const queryString = stringifySearchParams(newFilters);
-    router.push(queryString ? `/?${queryString}` : '/');
-  };
+    const queryString = stringifySearchParams(newFilters)
+    router.push(queryString ? `/?${queryString}` : "/")
+  }
 
   const handleFilterChange = (
     filterType: keyof SearchParams,
     value: string | undefined
   ) => {
     startTransition(() => {
-      const newFilters = { ...optimisticFilters, [filterType]: value };
-      setOptimisticFilters(newFilters);
-      updateURL(newFilters);
-    });
-  };
+      const newFilters = { ...optimisticFilters, [filterType]: value }
+      setOptimisticFilters(newFilters)
+      updateURL(newFilters)
+    })
+  }
 
   const handleCategoryToggle = (category: string) => {
-    const currentCategories = optimisticFilters.categories?.split(',') || [];
+    const currentCategories = optimisticFilters.categories?.split(",") || []
+
     const newCategories = currentCategories.includes(category)
       ? currentCategories.filter((cat) => cat !== category)
-      : [...currentCategories, category];
+      : [...currentCategories, category]
 
-    handleFilterChange('categories', newCategories.join(','));
-  };
+    console.log(newCategories)
+
+    handleFilterChange("categories", newCategories.join(","))
+  }
 
   const handleClearFilters = () => {
     startTransition(() => {
-      setOptimisticFilters({});
-      router.push('/');
-    });
-  };
+      setOptimisticFilters({})
+      router.push("/")
+    })
+  }
 
   return (
     <div
-      data-pending={isPending ? '' : undefined}
+      data-pending={isPending ? "" : undefined}
       className="flex-shrink-0 flex flex-col h-full rounded-lg"
     >
       <ScrollArea className="flex-grow">
         <div className="p-2 space-y-4">
-
           {/* Name Filter */}
-          <div>
+          {/* <div>
             <Label htmlFor="name">Name</Label>
             <Input
               id="name"
-              value={optimisticFilters.name || ''}
-              onChange={(e) => handleFilterChange('name', e.target.value)}
+              value={optimisticFilters.name || ""}
+              onChange={(e) => handleFilterChange("name", e.target.value)}
               placeholder="Enter name"
               className="mt-2"
             />
-          </div>
+          </div> */}
 
           {/* Price Filter */}
-          <div>
+          {/* <div>
             <Label htmlFor="price-range">Price Range</Label>
             <Slider
               id="price-range"
@@ -91,7 +93,7 @@ function FilterBase({ searchParams }: FilterProps) {
               step={10}
               value={[Number(optimisticFilters.price) || 1000]}
               onValueChange={([value]) =>
-                handleFilterChange('price', value.toString())
+                handleFilterChange("price", value.toString())
               }
               className="mt-2"
             />
@@ -99,24 +101,26 @@ function FilterBase({ searchParams }: FilterProps) {
               <span>$0</span>
               <span>{optimisticFilters.price || 1000}</span>
             </div>
-          </div>
+          </div> */}
 
           {/* Categories Filter */}
           <div>
             <Label>Categories</Label>
             <ScrollArea className="h-[200px] mt-2">
-              {CATEGORIES.map((category) => (
+              {categories.map((category) => (
                 <div
-                  key={category.value}
+                  key={category.id}
                   className="flex items-center space-x-2 py-1"
                 >
                   <Checkbox
-                    id={`category-${category.value}`}
-                    checked={optimisticFilters.categories?.split(',').includes(category.value)}
-                    onCheckedChange={() => handleCategoryToggle(category.value)}
+                    id={`category-${category.name}`}
+                    checked={optimisticFilters.categories
+                      ?.split(",")
+                      .includes(category.name)}
+                    onCheckedChange={() => handleCategoryToggle(category.name)}
                   />
-                  <Label htmlFor={`category-${category.value}`}>
-                    {category.label}
+                  <Label htmlFor={`category-${category.name}`}>
+                    {category.name}
                   </Label>
                 </div>
               ))}
@@ -137,14 +141,21 @@ function FilterBase({ searchParams }: FilterProps) {
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export function FilterFallback() {
-  return <FilterBase searchParams={new URLSearchParams()} />;
+interface FilterProps {
+  categories: Category[]
 }
 
-export function Filter() {
-  const searchParams = useSearchParams();
-  return <FilterBase searchParams={searchParams} />;
+export function FilterFallback({ categories }: FilterProps) {
+  return (
+    <FilterBase categories={categories} searchParams={new URLSearchParams()} />
+  )
+}
+
+export function Filter({ categories }: FilterProps) {
+  const searchParams = useSearchParams()
+
+  return <FilterBase categories={categories} searchParams={searchParams} />
 }

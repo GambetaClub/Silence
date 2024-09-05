@@ -5,6 +5,7 @@ import { Suspense } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
 import Search from "@/components/layout/search"
 import { Filter } from "@/components/layout/filters"
+import { fetchAllCategories } from "@/actions/server/categories"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -22,11 +23,13 @@ export const metadata: Metadata = {
   description: "Developing in secret...",
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+
+  const categories = await fetchAllCategories()
   return (
     <html lang="en">
       <body
@@ -39,7 +42,7 @@ export default function RootLayout({
                 <Suspense
                   fallback={<Skeleton className="h-4 w-20 rounded-lg" />}
                 >
-                  <Filter />
+                  <Filter categories={categories}/>
                 </Suspense>
               </div>
             </div>
@@ -57,7 +60,6 @@ export default function RootLayout({
             <div className="flex-1 flex flex-col p-4">{children}</div>
           </div>
         </div>
-        {children}
       </body>
     </html>
   )

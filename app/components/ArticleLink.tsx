@@ -15,7 +15,7 @@ const ArticleLink = ({ searchParams, article }: ArticleLinkProps) => {
       key={article.id}
       className="block transition ease-in-out md:hover:scale-105"
     >
-        {article.name}
+      {article.name}
     </Link>
   )
 }

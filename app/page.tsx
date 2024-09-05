@@ -8,11 +8,9 @@ interface HomePageProps {
 }
 
 export default async function HomePage({ searchParams }: HomePageProps) {
-  const start = 0
-  const take = 5
 
   const [articles] = await Promise.all([
-    fetchArticlesWithPagination("eso", start, take),
+    fetchArticlesWithPagination(searchParams),
   ])
 
   const parsedSearchParams = parseSearchParams(searchParams)

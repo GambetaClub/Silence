@@ -1,5 +1,7 @@
 export interface SearchParams {
   search?: string;
+  price?: string;
+  categories?: string;
   page?: string;
 }
 
@@ -8,6 +10,8 @@ export function parseSearchParams(
 ): SearchParams {
   return {
     search: typeof params.search === 'string' ? params.search : undefined,
+    price: typeof params.search === 'string' ? params.search : undefined,
+    categories: typeof params.categories === 'string' ? params.categories : undefined,
     page: typeof params.page === 'string' ? params.page : undefined,
   };
 }
