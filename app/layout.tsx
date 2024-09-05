@@ -3,10 +3,11 @@ import localFont from "next/font/local"
 import "./globals.css"
 import { Suspense } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
-import { fetchAllCategories } from "@/actions/server/categories"
 import { Toaster } from "@/components/ui/sonner"
 import { Filter } from "./components/Filters"
 import Search from "./components/Search"
+import db from "@/lib/database"
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,7 +30,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const categories = await fetchAllCategories()
+  const categories = await db.category.findMany()
   return (
     <html lang="en">
       <body
